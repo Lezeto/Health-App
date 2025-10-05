@@ -56,6 +56,8 @@ button.link { background: transparent; border: none; color: var(--primary); padd
 
 .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
 .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.card .row > button.primary { margin-right: 6px; }
+.card .row > button.primary + button.primary { margin-left: 0; }
 .list { display: grid; gap: 8px; }
 .list-item { display: flex; justify-content: space-between; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; background: #0c121a; }
 .list-item .title { font-weight: 600; }

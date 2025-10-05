@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, BarChart, Bar } from 'recharts';
 import './App.css';
 import { supabase, getAccessToken } from './supabaseClient';
 
@@ -296,7 +297,8 @@ function HabitsCard({ canWrite = true, targetUserId }) {
 	const todayISO = new Date().toISOString().slice(0, 10);
 	const [form, setForm] = useState({ date: todayISO, steps: '', water_cups: '', sleep_hours: '' });
 	const [range, setRange] = useState(7);
-	const [data, setData] = useState([]);
+		const [data, setData] = useState([]);
+		const [view, setView] = useState('table'); // 'table' | 'chart'
 	const [loading, setLoading] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const load = async () => {
@@ -339,7 +341,13 @@ function HabitsCard({ canWrite = true, targetUserId }) {
 					<button onClick={load}>Refresh</button>
 				</div>
 			</div>
-			{canWrite && (
+					<div className="row between" style={{marginTop: 8}}>
+						<div className="row">
+							<button onClick={() => setView('table')} className={view==='table'?'primary':''}>Table</button>
+							<button onClick={() => setView('chart')} className={view==='chart'?'primary':''}>Chart</button>
+						</div>
+					</div>
+					{canWrite && (
 				<form onSubmit={submit} className="row wrap gap">
 					<label>
 						Date
@@ -360,9 +368,9 @@ function HabitsCard({ canWrite = true, targetUserId }) {
 					<button className="primary" disabled={saving} type="submit">{saving ? 'Saving…' : 'Save day'}</button>
 				</form>
 			)}
-			{loading ? (
+					{loading ? (
 				<div className="muted">Loading…</div>
-			) : (
+					) : view === 'table' ? (
 						<Table
 							rows={data}
 							columns={[
@@ -372,7 +380,22 @@ function HabitsCard({ canWrite = true, targetUserId }) {
 								{ key: 'sleep_hours', header: 'Sleep (h)' },
 							]}
 						/>
-			)}
+					) : (
+						<div style={{ width: '100%', height: 320 }}>
+							<ResponsiveContainer>
+								<BarChart data={[...data].reverse()}>
+									<CartesianGrid strokeDasharray="3 3" />
+									<XAxis dataKey="date" />
+									<YAxis />
+									<Tooltip />
+									<Legend />
+									<Bar dataKey="steps" name="Steps" fill="#4f8cff" />
+									<Bar dataKey="water_cups" name="Water (cups)" fill="#00c2a8" />
+									<Bar dataKey="sleep_hours" name="Sleep (h)" fill="#ffb74d" />
+								</BarChart>
+							</ResponsiveContainer>
+						</div>
+					)}
 		</div>
 	);
 }
@@ -388,7 +411,8 @@ function VitalsCard({ canWrite = true, targetUserId }) {
 		body_temperature: '',
 	});
 	const [range, setRange] = useState(7);
-	const [data, setData] = useState([]);
+		const [data, setData] = useState([]);
+		const [view, setView] = useState('table');
 	const [loading, setLoading] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const load = async () => {
@@ -439,7 +463,13 @@ function VitalsCard({ canWrite = true, targetUserId }) {
 					<button onClick={load}>Refresh</button>
 				</div>
 			</div>
-			{canWrite && (
+					<div className="row between" style={{marginTop: 8}}>
+						<div className="row">
+							<button onClick={() => setView('table')} className={view==='table'?'primary':''}>Table</button>
+							<button onClick={() => setView('chart')} className={view==='chart'?'primary':''}>Chart</button>
+						</div>
+					</div>
+					{canWrite && (
 				<form onSubmit={submit} className="row wrap gap">
 					<label>
 						Date
@@ -468,9 +498,9 @@ function VitalsCard({ canWrite = true, targetUserId }) {
 					<button className="primary" disabled={saving} type="submit">{saving ? 'Saving…' : 'Save day'}</button>
 				</form>
 			)}
-			{loading ? (
+					{loading ? (
 				<div className="muted">Loading…</div>
-			) : (
+					) : view === 'table' ? (
 						<Table
 							rows={data}
 							columns={[
@@ -482,7 +512,24 @@ function VitalsCard({ canWrite = true, targetUserId }) {
 								{ key: 'body_temperature', header: 'Temp' },
 							]}
 						/>
-			)}
+					) : (
+						<div style={{ width: '100%', height: 320 }}>
+							<ResponsiveContainer>
+								<LineChart data={[...data].reverse()}>
+									<CartesianGrid strokeDasharray="3 3" />
+									<XAxis dataKey="date" />
+									<YAxis />
+									<Tooltip />
+									<Legend />
+									<Line type="monotone" dataKey="blood_glucose" name="Glucose" stroke="#4f8cff" dot={false} />
+									<Line type="monotone" dataKey="blood_pressure_sys" name="BP Sys" stroke="#ef5350" dot={false} />
+									<Line type="monotone" dataKey="blood_pressure_dia" name="BP Dia" stroke="#ab47bc" dot={false} />
+									<Line type="monotone" dataKey="heart_rate" name="HR" stroke="#26c6da" dot={false} />
+									<Line type="monotone" dataKey="body_temperature" name="Temp" stroke="#ffb74d" dot={false} />
+								</LineChart>
+							</ResponsiveContainer>
+						</div>
+					)}
 		</div>
 	);
 }
