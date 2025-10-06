@@ -62,8 +62,8 @@ function AuthForms() {
 					password,
 					options: { emailRedirectTo: window.location.origin },
 				});
-				if (error) throw error;
-				setMessage('Check your email inbox to verify your address, then sign in.');
+			if (error) throw error;
+			setMessage('Revisa tu correo para verificar tu dirección y luego inicia sesión.');
 			} else {
 				const { error } = await supabase.auth.signInWithPassword({ email, password });
 				if (error) throw error;
@@ -76,31 +76,31 @@ function AuthForms() {
 	};
 
 	return (
-		<div className="auth-card">
-			<h1>Health Tracker</h1>
+			<div className="auth-card">
+				<h1>Rastreador de Salud</h1>
 			<form onSubmit={onSubmit}>
 				<label>
-					Email
+						Correo electrónico
 					<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 				</label>
 				<label>
-					Password
+						Contraseña
 					<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
 				</label>
 				<button className="primary" disabled={loading} type="submit">
-					{loading ? 'Please wait…' : mode === 'signup' ? 'Create account' : 'Sign in'}
+						{loading ? 'Por favor espera…' : mode === 'signup' ? 'Crear cuenta' : 'Iniciar sesión'}
 				</button>
 			</form>
 			<div className="muted">
 				{mode === 'signup' ? (
 					<span>
-						Already have an account?{' '}
-						<button className="link" onClick={() => setMode('signin')}>Sign in</button>
+							¿Ya tienes cuenta?{' '}
+							<button className="link" onClick={() => setMode('signin')}>Inicia sesión</button>
 					</span>
 				) : (
 					<span>
-						New here?{' '}
-						<button className="link" onClick={() => setMode('signup')}>Create account</button>
+							¿Eres nuevo?{' '}
+							<button className="link" onClick={() => setMode('signup')}>Crear cuenta</button>
 					</span>
 				)}
 			</div>
@@ -142,138 +142,138 @@ function Onboarding({ onDone }) {
 
 	return (
 		<div className="card">
-			<h2>Welcome! Tell us about you</h2>
+			<h2>¡Bienvenido! Cuéntanos sobre ti</h2>
 			<form onSubmit={submit} className="grid">
 				<label className="col-span-2">
-					Full name
+					  Nombre completo
 					<input value={name} onChange={(e) => setName(e.target.value)} required />
 				</label>
 				<label>
-					I am a
+					  Soy
 					<select value={role} onChange={(e) => setRole(e.target.value)}>
-						<option value="patient">Patient</option>
-						<option value="doctor">Doctor</option>
+						<option value="patient">Paciente</option>
+						<option value="doctor">Médico</option>
 					</select>
 				</label>
 				{role === 'patient' ? (
 					<div className="col-span-2">
-						<h3>Patient details</h3>
+						<h3>Datos del paciente</h3>
 						<div className="grid">
 							<label>
-								Age
+								Edad
 								<input type="number" value={patient.age} onChange={(e) => setPatient({ ...patient, age: e.target.value })} required />
 							</label>
 							<label>
-								Gender
+								Género
 								<select value={patient.gender} onChange={(e) => setPatient({ ...patient, gender: e.target.value })}>
-									<option value="male">Male</option>
-									<option value="female">Female</option>
-									<option value="other">Other</option>
+									  <option value="male">Masculino</option>
+									  <option value="female">Femenino</option>
+									  <option value="other">Otro</option>
 								</select>
 							</label>
 							<label>
-								Weight (kg)
+								Peso (kg)
 								<input type="number" step="0.1" value={patient.weight} onChange={(e) => setPatient({ ...patient, weight: e.target.value })} required />
 							</label>
 							<label>
-								Height (cm)
+								Altura (cm)
 								<input type="number" step="0.1" value={patient.height} onChange={(e) => setPatient({ ...patient, height: e.target.value })} required />
 							</label>
 							<label>
-								Nationality
+								Nacionalidad
 								<input value={patient.nationality} onChange={(e) => setPatient({ ...patient, nationality: e.target.value })} />
 							</label>
 							<label className="col-span-2">
-								Medical history
+								Historial médico
 								<textarea value={patient.medical_history} onChange={(e) => setPatient({ ...patient, medical_history: e.target.value })} />
 							</label>
 							<label className="col-span-2">
-								Current medications
+								Medicación actual
 								<textarea value={patient.current_medications} onChange={(e) => setPatient({ ...patient, current_medications: e.target.value })} />
 							</label>
 							<label className="col-span-2">
-								Allergies
+								Alergias
 								<textarea value={patient.allergies} onChange={(e) => setPatient({ ...patient, allergies: e.target.value })} />
 							</label>
 							<label className="col-span-2">
-								Family history
+								Antecedentes familiares
 								<textarea value={patient.family_history} onChange={(e) => setPatient({ ...patient, family_history: e.target.value })} />
 							</label>
 							<label className="col-span-2">
-								Lifestyle factors
+								Estilo de vida
 								<textarea value={patient.lifestyle_factors} onChange={(e) => setPatient({ ...patient, lifestyle_factors: e.target.value })} />
 							</label>
 						</div>
 					</div>
 				) : (
 					<div className="col-span-2">
-						<h3>Doctor details</h3>
+						<h3>Datos del médico</h3>
 						<div className="grid">
 							<label>
-								Age
+								Edad
 								<input type="number" value={doctor.age} onChange={(e) => setDoctor({ ...doctor, age: e.target.value })} required />
 							</label>
 							<label>
-								Gender
+								Género
 								<select value={doctor.gender} onChange={(e) => setDoctor({ ...doctor, gender: e.target.value })}>
-									<option value="male">Male</option>
-									<option value="female">Female</option>
-									<option value="other">Other</option>
+									  <option value="male">Masculino</option>
+									  <option value="female">Femenino</option>
+									  <option value="other">Otro</option>
 								</select>
 							</label>
 							<label>
-								Nationality
+								Nacionalidad
 								<input value={doctor.nationality} onChange={(e) => setDoctor({ ...doctor, nationality: e.target.value })} />
 							</label>
 							<label>
-								Level of education
+								Nivel educativo
 								<input value={doctor.level_of_education} onChange={(e) => setDoctor({ ...doctor, level_of_education: e.target.value })} />
 							</label>
 							<label className="col-span-2">
-								Medical school
+								Escuela de medicina
 								<input value={doctor.medical_school} onChange={(e) => setDoctor({ ...doctor, medical_school: e.target.value })} />
 							</label>
 							<label>
-								Year of education
+								Año de formación
 								<input type="number" value={doctor.year_of_education} onChange={(e) => setDoctor({ ...doctor, year_of_education: e.target.value })} />
 							</label>
 							<label className="col-span-2">
-								Medical license number
+								Número de licencia médica
 								<input value={doctor.medical_license_number} onChange={(e) => setDoctor({ ...doctor, medical_license_number: e.target.value })} />
 							</label>
 							<label>
-								Country/Region of licence
+								País/Región de licencia
 								<input value={doctor.license_region} onChange={(e) => setDoctor({ ...doctor, license_region: e.target.value })} />
 							</label>
 							<label>
-								Speciality
+								Especialidad
 								<input value={doctor.speciality} onChange={(e) => setDoctor({ ...doctor, speciality: e.target.value })} />
 							</label>
 							<label>
-								Years of experience
+								Años de experiencia
 								<input type="number" value={doctor.years_of_experience} onChange={(e) => setDoctor({ ...doctor, years_of_experience: e.target.value })} />
 							</label>
 							<label className="col-span-2">
-								Current workplace
+								Centro de trabajo actual
 								<input value={doctor.current_workplace} onChange={(e) => setDoctor({ ...doctor, current_workplace: e.target.value })} />
 							</label>
 							<label className="col-span-2">
-								Languages spoken
-								<input value={doctor.languages_spoken} onChange={(e) => setDoctor({ ...doctor, languages_spoken: e.target.value })} placeholder="e.g. English, Spanish" />
+								Idiomas
+								<input value={doctor.languages_spoken} onChange={(e) => setDoctor({ ...doctor, languages_spoken: e.target.value })} placeholder="p. ej., Español, Inglés" />
 							</label>
 						</div>
 					</div>
 				)}
 				{error && <div className="alert">{error}</div>}
 				<div className="actions col-span-2">
-					<button className="primary" disabled={loading} type="submit">{loading ? 'Saving…' : 'Continue'}</button>
+					  <button className="primary" disabled={loading} type="submit">{loading ? 'Guardando…' : 'Continuar'}</button>
 				</div>
 			</form>
 		</div>
 	);
 }
 
-function Table({ rows, columns, emptyText = 'No data' }) {
+function Table({ rows, columns, emptyText = 'Sin datos' }) {
 	if (!rows?.length) return <div className="muted">{emptyText}</div>;
 	return (
 		<div className="table">
@@ -329,55 +329,55 @@ function HabitsCard({ canWrite = true, targetUserId }) {
 	return (
 		<div className="card">
 			<div className="card-header">
-				<h3>Healthy habits</h3>
+			<h3>Hábitos saludables</h3>
 				<div className="row">
-					<label className="row">
-						Range
+								<label className="row">
+									Rango
 						<select value={range} onChange={(e) => setRange(Number(e.target.value))}>
-							<option value={7}>Last 7 days</option>
-							<option value={30}>Last 30 days</option>
+										<option value={7}>Últimos 7 días</option>
+										<option value={30}>Últimos 30 días</option>
 						</select>
 					</label>
-					<button onClick={load}>Refresh</button>
+								<button onClick={load}>Actualizar</button>
 				</div>
 			</div>
 					<div className="row between" style={{marginTop: 8}}>
 						<div className="row">
-							<button onClick={() => setView('table')} className={view==='table'?'primary':''}>Table</button>
-							<button onClick={() => setView('chart')} className={view==='chart'?'primary':''}>Chart</button>
+										<button onClick={() => setView('table')} className={view==='table'?'primary':''}>Tabla</button>
+										<button onClick={() => setView('chart')} className={view==='chart'?'primary':''}>Gráfico</button>
 						</div>
 					</div>
 					{canWrite && (
 				<form onSubmit={submit} className="row wrap gap">
 					<label>
-						Date
+						Fecha
 						<input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} required />
 					</label>
 					<label>
-						Steps
+						Pasos
 						<input type="number" value={form.steps} onChange={(e) => setForm({ ...form, steps: e.target.value })} />
 					</label>
 					<label>
-						Water (cups)
+						Agua (tazas)
 						<input type="number" value={form.water_cups} onChange={(e) => setForm({ ...form, water_cups: e.target.value })} />
 					</label>
 					<label>
-						Sleep (hours)
+						Sueño (horas)
 						<input type="number" step="0.1" value={form.sleep_hours} onChange={(e) => setForm({ ...form, sleep_hours: e.target.value })} />
 					</label>
-					<button className="primary" disabled={saving} type="submit">{saving ? 'Saving…' : 'Save day'}</button>
+					  <button className="primary" disabled={saving} type="submit">{saving ? 'Guardando…' : 'Guardar día'}</button>
 				</form>
 			)}
-					{loading ? (
-				<div className="muted">Loading…</div>
+							{loading ? (
+								<div className="muted">Cargando…</div>
 					) : view === 'table' ? (
 						<Table
 							rows={data}
 							columns={[
-								{ key: 'date', header: 'Date' },
-								{ key: 'steps', header: 'Steps' },
-								{ key: 'water_cups', header: 'Water (cups)' },
-								{ key: 'sleep_hours', header: 'Sleep (h)' },
+										{ key: 'date', header: 'Fecha' },
+										{ key: 'steps', header: 'Pasos' },
+										{ key: 'water_cups', header: 'Agua (tazas)' },
+										{ key: 'sleep_hours', header: 'Sueño (h)' },
 							]}
 						/>
 					) : (
@@ -389,9 +389,9 @@ function HabitsCard({ canWrite = true, targetUserId }) {
 									<YAxis />
 									<Tooltip />
 									<Legend />
-									<Bar dataKey="steps" name="Steps" fill="#4f8cff" />
-									<Bar dataKey="water_cups" name="Water (cups)" fill="#00c2a8" />
-									<Bar dataKey="sleep_hours" name="Sleep (h)" fill="#ffb74d" />
+											<Bar dataKey="steps" name="Pasos" fill="#4f8cff" />
+											<Bar dataKey="water_cups" name="Agua (tazas)" fill="#00c2a8" />
+											<Bar dataKey="sleep_hours" name="Sueño (h)" fill="#ffb74d" />
 								</BarChart>
 							</ResponsiveContainer>
 						</div>
@@ -451,65 +451,65 @@ function VitalsCard({ canWrite = true, targetUserId }) {
 	return (
 		<div className="card">
 			<div className="card-header">
-				<h3>Vitals</h3>
+			<h3>Signos vitales</h3>
 				<div className="row">
 					<label className="row">
-						Range
+									Rango
 						<select value={range} onChange={(e) => setRange(Number(e.target.value))}>
-							<option value={7}>Last 7 days</option>
-							<option value={30}>Last 30 days</option>
+										<option value={7}>Últimos 7 días</option>
+										<option value={30}>Últimos 30 días</option>
 						</select>
 					</label>
-					<button onClick={load}>Refresh</button>
+								<button onClick={load}>Actualizar</button>
 				</div>
 			</div>
 					<div className="row between" style={{marginTop: 8}}>
 						<div className="row">
-							<button onClick={() => setView('table')} className={view==='table'?'primary':''}>Table</button>
-							<button onClick={() => setView('chart')} className={view==='chart'?'primary':''}>Chart</button>
+										<button onClick={() => setView('table')} className={view==='table'?'primary':''}>Tabla</button>
+										<button onClick={() => setView('chart')} className={view==='chart'?'primary':''}>Gráfico</button>
 						</div>
 					</div>
 					{canWrite && (
 				<form onSubmit={submit} className="row wrap gap">
 					<label>
-						Date
+						Fecha
 						<input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} required />
 					</label>
 					<label>
-						Glucose (mg/dL)
+						Glucosa (mg/dL)
 						<input type="number" value={form.blood_glucose} onChange={(e) => setForm({ ...form, blood_glucose: e.target.value })} />
 					</label>
 					<label>
-						BP Sys
+						PA Sist
 						<input type="number" value={form.blood_pressure_sys} onChange={(e) => setForm({ ...form, blood_pressure_sys: e.target.value })} />
 					</label>
 					<label>
-						BP Dia
+						PA Diast
 						<input type="number" value={form.blood_pressure_dia} onChange={(e) => setForm({ ...form, blood_pressure_dia: e.target.value })} />
 					</label>
 					<label>
-						Heart rate (bpm)
+						Frecuencia (lpm)
 						<input type="number" value={form.heart_rate} onChange={(e) => setForm({ ...form, heart_rate: e.target.value })} />
 					</label>
 					<label>
-						Temperature (°C)
+						Temperatura (°C)
 						<input type="number" step="0.1" value={form.body_temperature} onChange={(e) => setForm({ ...form, body_temperature: e.target.value })} />
 					</label>
-					<button className="primary" disabled={saving} type="submit">{saving ? 'Saving…' : 'Save day'}</button>
+					  <button className="primary" disabled={saving} type="submit">{saving ? 'Guardando…' : 'Guardar día'}</button>
 				</form>
 			)}
-					{loading ? (
-				<div className="muted">Loading…</div>
+							{loading ? (
+								<div className="muted">Cargando…</div>
 					) : view === 'table' ? (
 						<Table
 							rows={data}
 							columns={[
-								{ key: 'date', header: 'Date' },
-								{ key: 'blood_glucose', header: 'Glucose' },
-								{ key: 'blood_pressure_sys', header: 'BP Sys' },
-								{ key: 'blood_pressure_dia', header: 'BP Dia' },
-								{ key: 'heart_rate', header: 'HR' },
-								{ key: 'body_temperature', header: 'Temp' },
+										{ key: 'date', header: 'Fecha' },
+										{ key: 'blood_glucose', header: 'Glucosa' },
+										{ key: 'blood_pressure_sys', header: 'PA Sist' },
+										{ key: 'blood_pressure_dia', header: 'PA Diast' },
+										{ key: 'heart_rate', header: 'FC' },
+										{ key: 'body_temperature', header: 'Temp' },
 							]}
 						/>
 					) : (
@@ -521,11 +521,11 @@ function VitalsCard({ canWrite = true, targetUserId }) {
 									<YAxis />
 									<Tooltip />
 									<Legend />
-									<Line type="monotone" dataKey="blood_glucose" name="Glucose" stroke="#4f8cff" dot={false} />
-									<Line type="monotone" dataKey="blood_pressure_sys" name="BP Sys" stroke="#ef5350" dot={false} />
-									<Line type="monotone" dataKey="blood_pressure_dia" name="BP Dia" stroke="#ab47bc" dot={false} />
-									<Line type="monotone" dataKey="heart_rate" name="HR" stroke="#26c6da" dot={false} />
-									<Line type="monotone" dataKey="body_temperature" name="Temp" stroke="#ffb74d" dot={false} />
+											<Line type="monotone" dataKey="blood_glucose" name="Glucosa" stroke="#4f8cff" dot={false} />
+											<Line type="monotone" dataKey="blood_pressure_sys" name="PA Sist" stroke="#ef5350" dot={false} />
+											<Line type="monotone" dataKey="blood_pressure_dia" name="PA Diast" stroke="#ab47bc" dot={false} />
+											<Line type="monotone" dataKey="heart_rate" name="FC" stroke="#26c6da" dot={false} />
+											<Line type="monotone" dataKey="body_temperature" name="Temp" stroke="#ffb74d" dot={false} />
 								</LineChart>
 							</ResponsiveContainer>
 						</div>
@@ -548,12 +548,12 @@ function DoctorsDirectory({ onSelect }) {
 	};
 	useEffect(() => { load(); }, []);
 	return (
-		<div className="card">
-			<div className="card-header row between">
-				<h3>All doctors</h3>
-				<button onClick={load}>Refresh</button>
+				<div className="card">
+					<div className="card-header row between">
+						<h3>Todos los médicos</h3>
+						<button onClick={load}>Actualizar</button>
 			</div>
-			{loading ? <div className="muted">Loading…</div> : (
+				{loading ? <div className="muted">Cargando…</div> : (
 				<div className="list">
 					{items.map((d) => (
 						<div className="list-item" key={d.id}>
@@ -561,7 +561,7 @@ function DoctorsDirectory({ onSelect }) {
 								<div className="title">{d.name}</div>
 								<div className="muted sm">{d.speciality || 'General'} · {d.languages_spoken || '—'}</div>
 							</div>
-							{onSelect && <button onClick={() => onSelect(d)}>Share data</button>}
+								{onSelect && <button onClick={() => onSelect(d)}>Compartir datos</button>}
 						</div>
 					))}
 				</div>
@@ -585,7 +585,7 @@ function LinksPanel({ role }) {
 		setMessage('');
 		try {
 			await apiFetch('link.select', { method: 'POST', body: { patient_email: patientEmail } });
-			setMessage('Selected. Waiting for mutual selection (if needed).');
+			setMessage('Seleccionado. Esperando selección mutua (si es necesario).');
 			await load();
 		} catch (e) { setMessage(e.message); }
 	};
@@ -593,7 +593,7 @@ function LinksPanel({ role }) {
 		setMessage('');
 		try {
 			await apiFetch('link.select', { method: 'POST', body: { doctor_id: doctor.id } });
-			setMessage('Doctor selected. They must also select you to see your data.');
+			setMessage('Médico seleccionado. También debe seleccionarte para ver tus datos.');
 			await load();
 		} catch (e) { setMessage(e.message); }
 	};
@@ -602,8 +602,8 @@ function LinksPanel({ role }) {
 			{role === 'patient' ? (
 				<>
 					<DoctorsDirectory onSelect={shareWithDoctor} />
-					<div className="card">
-						<h3>Mutual doctors</h3>
+								<div className="card">
+									<h3>Médicos con acceso mutuo</h3>
 						<ul>
 							{mutual.map((m) => (
 								<li key={m.id}>{m.name} · {m.speciality || 'General'}</li>
@@ -613,16 +613,16 @@ function LinksPanel({ role }) {
 				</>
 			) : (
 				<>
-					<div className="card">
-						<h3>Select a patient by email</h3>
+								<div className="card">
+									<h3>Selecciona un paciente por correo</h3>
 						<div className="row">
-							<input placeholder="patient@example.com" value={patientEmail} onChange={(e) => setPatientEmail(e.target.value)} />
-							<button onClick={patientSelect}>Select</button>
+										<input placeholder="paciente@ejemplo.com" value={patientEmail} onChange={(e) => setPatientEmail(e.target.value)} />
+										<button onClick={patientSelect}>Seleccionar</button>
 						</div>
-						<div className="muted sm">The patient must also select you to share their data.</div>
+									<div className="muted sm">El paciente también debe seleccionarte para compartir sus datos.</div>
 					</div>
 					<div className="card">
-						<h3>Mutual patients</h3>
+									<h3>Pacientes con acceso mutuo</h3>
 						<ul>
 							{mutual.map((p) => (
 								<li key={p.id}>{p.name || p.email}</li>
@@ -670,39 +670,39 @@ function Dashboard({ profile }) {
 
 	return (
 		<div className="container">
-			<header className="topbar">
-				<div className="brand">Health Tracker</div>
+					<header className="topbar">
+						<div className="brand">Rastreador de Salud</div>
 				<div className="row gap">
-					<div className="muted">{profile?.name} · {profile?.role}</div>
-					<button onClick={() => supabase.auth.signOut()}>Sign out</button>
+							<div className="muted">{profile?.name} · {profile?.role}</div>
+							<button onClick={() => supabase.auth.signOut()}>Cerrar sesión</button>
 				</div>
 			</header>
 			<nav className="tabs">
-				<button className={tab==='overview'?'active':''} onClick={() => setTab('overview')}>Overview</button>
-				<button className={tab==='habits'?'active':''} onClick={() => setTab('habits')}>Habits</button>
-				<button className={tab==='vitals'?'active':''} onClick={() => setTab('vitals')}>Vitals</button>
-				<button className={tab==='links'?'active':''} onClick={() => setTab('links')}>{isPatient ? 'Doctors' : 'Patients'}</button>
+						<button className={tab==='overview'?'active':''} onClick={() => setTab('overview')}>Resumen</button>
+						<button className={tab==='habits'?'active':''} onClick={() => setTab('habits')}>Hábitos</button>
+						<button className={tab==='vitals'?'active':''} onClick={() => setTab('vitals')}>Signos vitales</button>
+						<button className={tab==='links'?'active':''} onClick={() => setTab('links')}>{isPatient ? 'Médicos' : 'Pacientes'}</button>
 			</nav>
 			<main className="main">
 				{tab === 'overview' && (
 					<div className="grid two">
 									{isDoctor && (
 							<div className="card">
-								<h3>Pick a patient</h3>
+								<h3>Elige un paciente</h3>
 								<select value={selectedPatient?.id || ''} onChange={(e) => setSelectedPatient(patients.find(p => p.id === e.target.value))}>
 									<option value="">—</option>
 									{patients.map((p) => (
 										<option key={p.id} value={p.id}>{p.name || p.email}</option>
 									))}
 								</select>
-											{selectedPatient && <div className="muted">Viewing: {selectedPatient.name || selectedPatient.email}</div>}
+											{selectedPatient && <div className="muted">Viendo: {selectedPatient.name || selectedPatient.email}</div>}
 											{selectedPatientProfile?.patient && (
 												<div className="grid" style={{marginTop: 12}}>
-													<div>Age: {selectedPatientProfile.patient.age ?? '—'}</div>
-													<div>Gender: {selectedPatientProfile.patient.gender ?? '—'}</div>
-													<div>Height: {selectedPatientProfile.patient.height ?? '—'} cm</div>
-													<div>Weight: {selectedPatientProfile.patient.weight ?? '—'} kg</div>
-													<div className="col-span-2 muted sm">Allergies: {selectedPatientProfile.patient.allergies || '—'}</div>
+													<div>Edad: {selectedPatientProfile.patient.age ?? '—'}</div>
+													<div>Género: {selectedPatientProfile.patient.gender ?? '—'}</div>
+													<div>Altura: {selectedPatientProfile.patient.height ?? '—'} cm</div>
+													<div>Peso: {selectedPatientProfile.patient.weight ?? '—'} kg</div>
+													<div className="col-span-2 muted sm">Alergias: {selectedPatientProfile.patient.allergies || '—'}</div>
 												</div>
 											)}
 							</div>
@@ -747,7 +747,7 @@ export default function App() {
 	useEffect(() => { loadProfile(); }, [user?.id]);
 
 	if (!user) return <div className="page"><AuthForms /></div>;
-	if (loading) return <div className="page center">Loading…</div>;
+		if (loading) return <div className="page center">Cargando…</div>;
 	if (!profile) return <div className="page"><Onboarding onDone={loadProfile} /></div>;
 	return <Dashboard profile={profile} />;
 }
