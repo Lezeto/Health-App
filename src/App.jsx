@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, LabelList } from 'recharts';
 import './App.css';
 import { supabase, getAccessToken } from './supabaseClient';
+import { DataCacheProvider, useDataCache } from './DataCacheContext';
 
 // Custom label renderer: place label above the point; shift last label slightly left
 const makeTopLabelRenderer = (len) => (props) => {
@@ -315,12 +316,20 @@ function HabitsCard({ canWrite = true, targetUserId }) {
 	const [loading, setLoading] = useState(false);
 	const [saving, setSaving] = useState(false);
 
-	const load = async () => {
+	const cache = useDataCache();
+	const key = `${targetUserId || 'me'}:${range}`;
+	const load = async (opts = {}) => {
 		setLoading(true);
 		try {
+			if (!opts.force) {
+				const cached = cache.getCached('habits', key);
+				if (cached) { setData(cached); return; }
+			}
 			const q = `rangeDays=${range}${targetUserId ? `&user_id=${encodeURIComponent(targetUserId)}` : ''}`;
 			const res = await apiFetch('habits.fetch', { query: q });
-			setData(res.items || []);
+			const items = res.items || [];
+			cache.setCached('habits', key, items);
+			setData(items);
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -343,7 +352,8 @@ function HabitsCard({ canWrite = true, targetUserId }) {
 					sleep_hours: Number(form.sleep_hours || 0),
 				},
 			});
-			await load();
+			cache.clear('habits', key);
+			await load({ force: true });
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -367,7 +377,7 @@ function HabitsCard({ canWrite = true, targetUserId }) {
 							<option value={30}>Últimos 30 días</option>
 						</select>
 					</label>
-					<button onClick={load}>Actualizar</button>
+					<button onClick={() => load({ force: true })}>Actualizar</button>
 				</div>
 			</div>
 
@@ -484,12 +494,20 @@ function VitalsCard({ canWrite = true, targetUserId }) {
 	const [loading, setLoading] = useState(false);
 	const [saving, setSaving] = useState(false);
 
-	const load = async () => {
+	const cache = useDataCache();
+	const key = `${targetUserId || 'me'}:${range}`;
+	const load = async (opts = {}) => {
 		setLoading(true);
 		try {
+			if (!opts.force) {
+				const cached = cache.getCached('vitals', key);
+				if (cached) { setData(cached); return; }
+			}
 			const q = `rangeDays=${range}${targetUserId ? `&user_id=${encodeURIComponent(targetUserId)}` : ''}`;
 			const res = await apiFetch('vitals.fetch', { query: q });
-			setData(res.items || []);
+			const items = res.items || [];
+			cache.setCached('vitals', key, items);
+			setData(items);
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -512,7 +530,8 @@ function VitalsCard({ canWrite = true, targetUserId }) {
 				body_temperature: form.body_temperature ? Number(form.body_temperature) : null,
 			};
 			await apiFetch('vitals.upsert', { method: 'POST', body });
-			await load();
+			cache.clear('vitals', key);
+			await load({ force: true });
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -536,7 +555,7 @@ function VitalsCard({ canWrite = true, targetUserId }) {
 							<option value={30}>Últimos 30 días</option>
 						</select>
 					</label>
-					<button onClick={load}>Actualizar</button>
+					<button onClick={() => load({ force: true })}>Actualizar</button>
 				</div>
 			</div>
 
@@ -880,29 +899,37 @@ function Dashboard({ profile }) {
 	);
 }
 
+function AppInner() {
+   const { user } = useAuth();
+   const [profile, setProfile] = useState(null);
+   const [loading, setLoading] = useState(true);
+
+   const loadProfile = async () => {
+     if (!user) { setProfile(null); setLoading(false); return; }
+     setLoading(true);
+     try {
+       const res = await apiFetch('me');
+       setProfile(res.profile || null);
+     } catch (e) {
+       console.error(e);
+       setProfile(null);
+     } finally {
+       setLoading(false);
+     }
+   };
+
+   useEffect(() => { loadProfile(); }, [user?.id]);
+
+   if (!user) return <div className="page"><AuthForms /></div>;
+   if (loading) return <div className="page center">Cargando…</div>;
+   if (!profile) return <div className="page"><Onboarding onDone={loadProfile} /></div>;
+   return <Dashboard profile={profile} />;
+ }
+
 export default function App() {
-	const { user } = useAuth();
-	const [profile, setProfile] = useState(null);
-	const [loading, setLoading] = useState(true);
-
-	const loadProfile = async () => {
-		if (!user) { setProfile(null); setLoading(false); return; }
-		setLoading(true);
-		try {
-			const res = await apiFetch('me');
-			setProfile(res.profile || null);
-		} catch (e) {
-			console.error(e);
-			setProfile(null);
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	useEffect(() => { loadProfile(); }, [user?.id]);
-
-	if (!user) return <div className="page"><AuthForms /></div>;
-	if (loading) return <div className="page center">Cargando…</div>;
-	if (!profile) return <div className="page"><Onboarding onDone={loadProfile} /></div>;
-	return <Dashboard profile={profile} />;
+  return (
+    <DataCacheProvider>
+      <AppInner />
+    </DataCacheProvider>
+  );
 }
