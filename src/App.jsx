@@ -818,6 +818,9 @@ function Dashboard({ profile }) {
 	const [selectedPatient, setSelectedPatient] = useState(null);
 	const [selectedPatientProfile, setSelectedPatientProfile] = useState(null);
 
+	// Localized role label for header
+	const roleText = profile?.role === 'patient' ? 'paciente' : (profile?.role === 'doctor' ? 'médico' : profile?.role);
+
 	// For doctors, we need to pick a patient to view
 	useEffect(() => {
 		const load = async () => {
@@ -847,7 +850,7 @@ function Dashboard({ profile }) {
 			<header className="topbar">
 				<div className="brand">Rastreador de Salud</div>
 				<div className="row gap">
-					<div className="muted">{profile?.name} · {profile?.role}</div>
+					<div className="muted">{profile?.name} · {roleText}</div>
 					<button onClick={() => supabase.auth.signOut()}>Cerrar sesión</button>
 				</div>
 			</header>
